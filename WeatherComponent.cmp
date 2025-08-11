@@ -1,0 +1,28 @@
+<aura:component controller="WeatherDetailsClass" implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="city" type="String" default="London"/>
+    <aura:attribute name="weatherData" type="Object"/>
+    <aura:attribute name="forecastData" type="Object"/>
+    <aura:attribute name="isDarkMode" type="Boolean" default="false"/>
+    <aura:attribute name="isLoading" type="Boolean" default="false"/>
+    
+    <lightning:input name="city" label="Enter City" value="{!v.city}" />
+    <lightning:button label="Get Weather" onclick="{!c.getWeather}" />
+    
+    <aura:if isTrue="{!v.isLoading}">
+        <lightning:spinner alternativeText="Loading" size="medium"/>
+    </aura:if>
+
+    <!-- Current Weather -->
+    <aura:if isTrue="{!not(empty(v.weatherData))}">
+        <p>{!v.weatherData.name} - {!v.weatherData.main.temp} °C</p>
+        <img src="{!'https://openweathermap.org/img/w/' + v.weatherData.weather[0].icon + '.png'}" />
+    </aura:if>
+
+    <!-- Forecast -->
+    <aura:iteration items="{!v.forecastData.list}" var="day">
+        <div class="forecast-card">
+            <p>{!day.dt_txt}</p>
+            <p>{!day.main.temp} °C</p>
+        </div>
+    </aura:iteration>
+</aura:component>
